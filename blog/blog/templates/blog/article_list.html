@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="padding-left:20%;padding-right:20%;">
+Articles for {{ time_now }}
+
+{% for article in article_list %}
+    <a href="{% url 'blog:article' article.pk %}"><h1>{{ article.name }}</h1></a>
+    <p>{{ article.text }}</p>
+    <hr>
+{% endfor %}
+</div>
+</body>
+</html>
