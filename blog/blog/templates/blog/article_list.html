@@ -4,10 +4,11 @@
 {% block title %} Articles {% endblock %}
 
 {% block body %}
-    Articles for {{ time_now | date:"d M Y" }}
+    Articles for {{ time_now | date:"d M Y" }} <br>
 
     {% for article in article_list %}
-        <a href="{% url 'blog:article' article.pk %}"><h1>{{ article.name }}</h1></a>
+        Author {{ article.user.username }}
+        <a href="{% url 'blog:detail_article' article.pk %}"><h1>{{ article.name }}</h1></a>
         <p>{{ article.text | truncatewords:10}}</p>
         <hr>
     {% endfor %}

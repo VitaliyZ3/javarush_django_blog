@@ -4,5 +4,5 @@ app_name = "blog"
 
 urlpatterns = [
     path('articles/', ArticlesGeneric.as_view(), name="articles"),
-    path('article/<int:pk>', ArticleDetailGeneric.as_view(), name="article")
+    path('article/<int:pk>', ArticleDetailGeneric.as_view(), name="detail_article")
 ]

@@ -7,5 +7,8 @@
 <p>{{ article.text }}</p>
 <hr>
 <a role="button" href="{% url 'blog:articles' %}" class="btn btn-primary">Back to Articles</a>
-
+    Viewed by:
+    {% for user in article.watched_users.all %}
+        {{ user.username }}
+    {% endfor %}
 {% endblock %}

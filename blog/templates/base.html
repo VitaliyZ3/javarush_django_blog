@@ -29,6 +29,12 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Create Article</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'blog:articles'%}?username={{user.username}}">My Articles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'blog:articles'%}?user_id={{user.id}}">Article to Review</a>
+        </li>
         {% else %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/admin/login/?next=/blog/articles">Login</a>
