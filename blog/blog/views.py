@@ -4,6 +4,7 @@ from datetime import datetime
 
 class ArticlesGeneric(ListView):
     model = Article
+    paginate_by = 1
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context_data = super().get_context_data(object_list=None, **kwargs)
@@ -12,19 +13,6 @@ class ArticlesGeneric(ListView):
 
 class ArticleDetailGeneric(DetailView):
     model = Article
-
-
-def process_feedback(request):
-    text = "Hello, my company Tesla got troubles with AI optimizations"
-    user_feedback = UserFeedback(
-        username="Oleg",
-        email="asda@gmail.com",
-        phone="+380979132112",
-        text=text
-    )
-    user_feedback.save()
-    if generate_and_append_pain_poins(user_feedback):
-        user_feedback.refresh_from_db()
 
 
 
