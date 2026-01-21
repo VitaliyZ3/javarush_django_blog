@@ -8,10 +8,12 @@ class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, null=False)
     text = models.TextField()
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name="ASDA")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
+    date = models.DateTimeField(null=True, blank=True)
     slug = models.SlugField(default="", null=True, blank=True)
     approver_users = models.ManyToManyField(User, related_name="articles_to_approve")
     watched_users = models.ManyToManyField(User, related_name="watched_users")
+    is_published = models.BooleanField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -19,4 +21,4 @@ class Article(models.Model):
         super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.slug
+        return self.name

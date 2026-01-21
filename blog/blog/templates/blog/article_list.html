@@ -7,7 +7,7 @@
     Articles for {{ time_now | date:"d M Y" }} <br>
 
     {% for article in article_list %}
-        Author {{ article.user.username }}
+        Number of Views {{ article.number_of_views }}
         <a href="{% url 'blog:detail_article' article.pk %}"><h1>{{ article.name }}</h1></a>
         <p>{{ article.text | truncatewords:10}}</p>
         <hr>
