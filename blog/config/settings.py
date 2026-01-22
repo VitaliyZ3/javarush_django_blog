@@ -40,7 +40,9 @@ INSTALLED_APPS = [
 
     # Third Party
     "phonenumber_field",
-    "debug_toolbar"
+    "debug_toolbar",
+    "django_bootstrap5",
+    'markdownx',
 ]
 
 MIDDLEWARE = [

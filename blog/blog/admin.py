@@ -31,7 +31,7 @@ class ArticleAdmin(admin.ModelAdmin):
             "classes": ("collapse",)
         }),
         ("Other:", {
-            "fields": ("watched_users","date"),
+            "fields": ("watched_users",),
         })
     )
 

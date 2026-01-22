@@ -6,8 +6,8 @@ User = get_user_model()
 
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=100, null=False)
-    text = models.TextField()
+    name = models.CharField(max_length=100, null=False, verbose_name="Article Name")
+    text = models.TextField(verbose_name="Article Text")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date = models.DateTimeField(null=True, blank=True)
     slug = models.SlugField(default="", null=True, blank=True)

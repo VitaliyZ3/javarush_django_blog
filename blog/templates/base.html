@@ -27,7 +27,7 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Create Article</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'blog:create_article' %}">Create Article</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'blog:articles'%}?username={{user.username}}">My Articles</a>

@@ -2,6 +2,9 @@ from django.views.generic import ListView, DetailView
 from .models import Article, User
 from datetime import datetime
 from django.db.models import Count, Sum, Avg, Min, Max, Q, F
+from .forms import ArticleForm
+from django.shortcuts import render, redirect
+
 
 class ArticlesGeneric(ListView):
     model = Article
@@ -34,51 +37,19 @@ class ArticleDetailGeneric(DetailView):
 
         return article
 
-def get_post_count(request):
-    '''
-    SELECT * FROM products
-    WHERE
-        quantity < min_stock
-        AND
-        quantity = 4
-        AND
-        name ilike '%laptop%'
-    '''
-    result = Product.objects.filter(
-        Q(quantity__lt=F('min_stock')) &
-        Q(quantity=1) &
-        Q(name__icontains="laptop")
-    )
-
-    '''
-    SELECT 
-        *, 
-        COUNT(posts) as num_posts, 
-        AVG (posts__rating) as avg_rating
-    FROM Author
-        WHERE  
-            (num_posts > 5 OR
-            avg_rating > 4.0) AND 
-            name != admin
-    ORDER BY name
-        
-    '''
-
-    authors_complex_query = Author.objects.annotate(
-        num_posts=Count('posts'),  # Анотація: кількість постів
-        avg_rating=Avg('posts__rating')  # Анотація: середній рейтинг постів
-    ).filter(
-        Q(num_posts__gt=5) | Q(avg_rating__gt=4.0)  # Фільтр по анотаціям з АБО
-    ).exclude(
-        name='admin'
-    ).order_by(
-        'name'
-    )
-
-    authors_complex_query
-
-
-
+def create_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article_obj = Article(**form.cleaned_data)
+            article_obj.user = request.user
+            article_obj.save()
+            return redirect('blog:detail_article', pk=article_obj.id)
+        else:
+            form.add_error(None, "Error with form processing")
+    else: # if GET method
+        form = ArticleForm()
+    return render(request, 'blog/article_create.html', {'form': form})
 
 
 
