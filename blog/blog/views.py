@@ -1,9 +1,12 @@
-from django.views.generic import ListView, DetailView
-from .models import Article, User
 from datetime import datetime
+
 from django.db.models import Count, Sum, Avg, Min, Max, Q, F
-from .forms import ArticleForm
 from django.shortcuts import render, redirect
+from django.contrib import admin, messages
+from django.views.generic import ListView, DetailView
+
+from .models import Article, User
+from .forms import ArticleForm
 
 
 class ArticlesGeneric(ListView):
@@ -41,13 +44,14 @@ def create_article(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST)
         if form.is_valid():
-            article_obj = Article(**form.cleaned_data)
+            article_obj = form.save(commit=False)
             article_obj.user = request.user
             article_obj.save()
+            messages.success(request, "Article Create message")
             return redirect('blog:detail_article', pk=article_obj.id)
         else:
             form.add_error(None, "Error with form processing")
-    else: # if GET method
+    else:
         form = ArticleForm()
     return render(request, 'blog/article_create.html', {'form': form})
 

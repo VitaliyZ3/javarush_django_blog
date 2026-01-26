@@ -10,6 +10,7 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ["name", "text"]
+        labels = {"name": "Article Name"}
 
     def clean_text(self):
         text = self.cleaned_data["text"]
@@ -17,3 +18,7 @@ class ArticleForm(forms.ModelForm):
             raise forms.ValidationError("You cannot use django word in form")
         else:
             return text
+
+    def save(self, *args, **kwargs):
+        print("save method called!")
+        return super(ArticleForm, self).save(*args, **kwargs)
