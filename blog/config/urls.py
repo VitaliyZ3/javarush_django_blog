@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
+from django.contrib.auth.urls import urlpatterns as auth_patterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls", namespace="blog")),
     path('markdownx/', include('markdownx.urls')),
+    path('auth/', include((auth_patterns, 'auth'), namespace="auth"))
 ] + debug_toolbar_urls()

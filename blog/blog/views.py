@@ -4,12 +4,15 @@ from django.db.models import Count, Sum, Avg, Min, Max, Q, F
 from django.shortcuts import render, redirect
 from django.contrib import admin, messages
 from django.views.generic import ListView, DetailView
-
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, User
 from .forms import ArticleForm
 
 
-class ArticlesGeneric(ListView):
+class ArticlesGeneric(LoginRequiredMixin, ListView):
     model = Article
     paginate_by = 10
     queryset = Article.objects.select_related('user')
@@ -30,9 +33,10 @@ class ArticlesGeneric(ListView):
         context_data["time_now"] = datetime.now()
         return context_data
 
-class ArticleDetailGeneric(DetailView):
+class ArticleDetailGeneric(LoginRequiredMixin, DetailView):
     model = Article
     queryset = Article.objects.prefetch_related("watched_users")
+
     def get_object(self, queryset=None):
         article = super().get_object(queryset=None)
         article.watched_users.add(self.request.user)
@@ -40,6 +44,8 @@ class ArticleDetailGeneric(DetailView):
 
         return article
 
+
+@login_required
 def create_article(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST)
@@ -55,8 +61,37 @@ def create_article(request):
         form = ArticleForm()
     return render(request, 'blog/article_create.html', {'form': form})
 
+def login_user(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()  # Retrieve the authenticated user
+            login(request, user)
+            messages.success(request, "Success Login")
+            return redirect('blog:articles')
+        else:
+            form.add_error(None, "Error with Authentication")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'blog/user_login.html', {'form': form})
 
+def logout_user(request):
+    logout(request)
+    return redirect('auth:login')
 
+def create_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Success User Registration")
+            return redirect('blog:articles')
+        else:
+            form.add_error(None, "Error with Registration")
+    else:
+        form = UserCreationForm()
+    return render(request, 'blog/user_create.html', {'form': form})
 
 
 
