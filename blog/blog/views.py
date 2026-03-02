@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.db.models import Count, Sum, Avg, Min, Max, Q, F
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib import admin, messages
 from django.views.generic import ListView, DetailView

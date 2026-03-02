@@ -22,6 +22,7 @@ from django.contrib.auth.urls import urlpatterns as auth_patterns
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls", namespace="blog")),
-    path('markdownx/', include('markdownx.urls')),
-    path('auth/', include((auth_patterns, 'auth'), namespace="auth"))
+    path("markdownx/", include("markdownx.urls")),
+    path("api/", include("blog_api.urls", namespace="api")),
+    path("auth/", include((auth_patterns, "auth"), namespace="auth"))
 ] + debug_toolbar_urls()

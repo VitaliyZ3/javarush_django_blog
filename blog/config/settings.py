@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'blog_api.apps.BlogApiConfig',
 
     # Third Party
     "phonenumber_field",
     "debug_toolbar",
     "django_bootstrap5",
-    'markdownx',
+    "markdownx",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
