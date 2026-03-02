@@ -1,9 +1,11 @@
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+from .permissions import IsOwnerOrReadOnlyObject
 from .serializers import ArticleSerializer, UserDemoRequestSerializer, UserSerializer
 from blog.models import Article, User
 
@@ -26,6 +28,7 @@ class ArticleAPIView(APIView):
 class ArticleViewSet(ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnlyObject]
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
