@@ -9,11 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     # user = serializers.HyperlinkedRelatedField(view_name="api:user-detail", read_only=True)
-    # user = serializers.SlugRelatedField(slug_field='username', read_only=True)
-    # approver_users = UserSerializer(read_only=True, many=True)
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    approver_users = UserSerializer(read_only=True, many=True)
     class Meta:
         model = Article
-        fields = ["pk", "name", "text", "user", "approver_users"]
+        fields = ["pk", "name", "text", "user", "date_created","approver_users"]
 
     def to_representation(self, instance):
         res = super().to_representation(instance)
