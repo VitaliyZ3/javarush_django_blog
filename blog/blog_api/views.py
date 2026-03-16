@@ -1,15 +1,19 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet, ViewSet
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.pagination import LimitOffsetPagination
-
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
+from django.core.signals import request_finished
+
 from .serializers import ArticleSerializer, UserDemoRequestSerializer, UserSerializer
 from .paginators import ArticlePaginator
+from .permissions import IsOwnerOrReadOnlyObject, ArticlePermission
+from .mixins import ReadAndCreateModelViewSet
 from blog.models import Article, User
 
 
@@ -36,9 +40,21 @@ class ArticleViewSet(ModelViewSet):
     filterset_fields = ["name", "text"]
     search_fields = ["name", "text", "user__username"]
     ordering_fields = "__all__"
-    # permission_classes = [IsAuthenticated, IsOwnerOrReadOnlyObject]
+    permission_classes = [ArticlePermission]
 
-class UserViewSet(ModelViewSet):
+    @action(detail=False, methods=["post"], url_path="create-list")
+    def create_list(self, request, pk):
+        # serializer =  serializer(request.data)
+        # serializer.save()
+        pass
+
+    @action(detail=False, methods=["patch"], url_path="approve-many")
+    def approve(self, request, pk):
+        # serializer =  serializer(request.data)
+        # serializer.save()
+        pass
+
+class UserViewSet(ReadAndCreateModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -54,4 +70,3 @@ class UserDemoRequestAPIView(APIView):
             return Response({"message": res}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

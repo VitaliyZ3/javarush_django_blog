@@ -25,10 +25,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ALLOWED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000", "http://127.0.0.1:3000"]
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,16 +41,20 @@ INSTALLED_APPS = [
     'blog_api.apps.BlogApiConfig',
 
     # Third Party
-    "phonenumber_field",
-    "debug_toolbar",
-    "django_bootstrap5",
-    "markdownx",
     "rest_framework_simplejwt",
     "rest_framework",
-    "django_filters"
+    "drf_yasg",
+    "django_bootstrap5",
+    "django_filters",
+    "debug_toolbar",
+    "corsheaders",
+    "phonenumber_field",
+    "markdownx",
 ]
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,6 +131,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+SWAGGER_USE_COMPAT_RENDERERS = False
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'

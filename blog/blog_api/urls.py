@@ -1,23 +1,25 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView
-)
-from .views import ArticleViewSet, UserDemoRequestAPIView, UserViewSet
+import rest_framework_simplejwt.views as token_views
+from . import views
 
 app_name = "blog_api"
 
+view_set_list = [
+    {"url": "articles", "view_class": views.ArticleViewSet, "basename": "article"},
+    {"url": "users", "view_class": views.UserViewSet, "basename": "user"},
+]
+
 router = DefaultRouter()
-router.register(r'articles', ArticleViewSet, basename='article')
-router.register(r'users', UserViewSet, basename='user')
+for view_set in view_set_list:
+    router.register(rf'{view_set["url"]}', view_set["view_class"], basename=view_set["basename"])
 
 urlpatterns = [
     # Articles
     path("", include(router.urls)),
     # Users
-    path("user_demo_request/", UserDemoRequestAPIView.as_view()),
+    path("user_demo_request/", views.UserDemoRequestAPIView.as_view()),
     # JWT
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/', token_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', token_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]

@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -22,3 +24,13 @@ class Article(models.Model):
 
     def __str__(self):
         return self.name
+
+@receiver(pre_save, sender=Article)
+def print_save_data(sender, **kwargs):
+    if kwargs.get("instance"):
+        print("Pre SAVE")
+
+@receiver(post_save, sender=Article)
+def print_save_data(sender, **kwargs):
+    if kwargs.get("instance"):
+        print("Post SAVE")
