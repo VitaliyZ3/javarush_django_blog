@@ -29,3 +29,9 @@ class UserDemoRequestSerializer(serializers.Serializer):
             raise serializers.ValidationError("Valera роби роботу, а не грайся в Postman")
         return value
 
+class SingleMessageResponseSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=20)
+
+class SupportTicketRequestSerializer(serializers.Serializer):
+    problem_description = serializers.CharField(max_length=512)
+    contact_email = serializers.EmailField(max_length=512)

@@ -7,15 +7,17 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
+from drf_yasg.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.signals import request_finished
 
-from .serializers import ArticleSerializer, UserDemoRequestSerializer, UserSerializer
+from .serializers import (
+    ArticleSerializer, UserDemoRequestSerializer,
+    UserSerializer, SingleMessageResponseSerializer, SupportTicketRequestSerializer)
 from .paginators import ArticlePaginator
 from .permissions import IsOwnerOrReadOnlyObject, ArticlePermission
 from .mixins import ReadAndCreateModelViewSet
 from blog.models import Article, User
-
 
 class ArticleAPIView(APIView):
 
@@ -42,17 +44,13 @@ class ArticleViewSet(ModelViewSet):
     ordering_fields = "__all__"
     permission_classes = [ArticlePermission]
 
-    @action(detail=False, methods=["post"], url_path="create-list")
-    def create_list(self, request, pk):
-        # serializer =  serializer(request.data)
-        # serializer.save()
-        pass
+    def create(self, request, *args, **kwargs):
+        """
+        Create article
 
-    @action(detail=False, methods=["patch"], url_path="approve-many")
-    def approve(self, request, pk):
-        # serializer =  serializer(request.data)
-        # serializer.save()
-        pass
+        Mandatory to send name and description for article creation
+        """
+        return super().create(request, args, kwargs)
 
 class UserViewSet(ReadAndCreateModelViewSet):
     queryset = User.objects.all()
@@ -63,10 +61,22 @@ def send_email_to_demo_user(user_data):
 
 class UserDemoRequestAPIView(APIView):
 
+    @swagger_auto_schema(request_body=UserDemoRequestSerializer, responses={200:SingleMessageResponseSerializer})
     def post(self, request):
+        """
+        Send link to provided email and subscribe user for future news
+        """
         serializer = UserDemoRequestSerializer(data=request.data)
         if serializer.is_valid():
             res = send_email_to_demo_user(serializer.data)
             return Response({"message": res}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@swagger_auto_schema(
+    operation_summary="Create ticker for user issue",
+    request_body=SupportTicketRequestSerializer,
+    responses={200: SingleMessageResponseSerializer}
+)
+def create_support_ticket(request):
+    return Response({"message": "Ticket created"})

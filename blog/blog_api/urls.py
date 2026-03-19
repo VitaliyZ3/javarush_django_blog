@@ -19,6 +19,7 @@ urlpatterns = [
     path("", include(router.urls)),
     # Users
     path("user_demo_request/", views.UserDemoRequestAPIView.as_view()),
+    path("create_support_ticket/", views.create_support_ticket),
     # JWT
     path('token/', token_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', token_views.TokenRefreshView.as_view(), name='token_refresh'),
