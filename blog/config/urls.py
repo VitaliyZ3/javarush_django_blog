@@ -35,7 +35,6 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     # drf-yasg
@@ -47,5 +46,6 @@ urlpatterns = [
 
     path("blog/", include("blog.urls", namespace="blog")),
     path("api/", include("blog_api.urls", namespace="api")),
+    path("graphql/", include("blog_graph_ql.urls", namespace="graph_ql")),
     path("auth/", include((auth_patterns, "auth"), namespace="auth")),
 ] + debug_toolbar_urls()

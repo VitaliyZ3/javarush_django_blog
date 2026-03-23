@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'blog_api.apps.BlogApiConfig',
+    'blog_graph_ql.apps.BlogGraphQlConfig',
 
     # Third Party
     "rest_framework_simplejwt",
     "rest_framework",
+    "graphene_django",
     "drf_yasg",
     "drf_spectacular",
     "django_bootstrap5",
@@ -95,6 +97,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+GRAPHENE = {
+    "SCHEMA": "blog_graph_ql.schema.schema"
 }
 
 DATABASES = {
