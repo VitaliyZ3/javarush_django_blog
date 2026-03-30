@@ -20,7 +20,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
     # Form View
     # inlines = [UserInline]
-    readonly_fields = ("name","user","date_created")
+    readonly_fields = ("name","date_created")
     fieldsets = (
         ("Article Content:", {
             "fields": ("name", "text", "user", "date_created"),
